@@ -15,6 +15,7 @@ args = parser.parse_args()
 DATEFORMAT = '%b-%d-%y'
 BACKUP_IN_DROPBOX = True
 BACKUP_DESTINATION_DIR = '~/Dropbox/RIGHTSOURCE/timesheet/'
+GENERATOR_HOME = '~/Repo/timesheet-generator/'
 
 CELLMAPS = [
     {'data': 'date', 'day': 0, 'cells': ['B12', 'A18']},
@@ -49,7 +50,7 @@ def main():
     base = get_base_file_name()
     output_file_name = get_output_file_name(monday, base)
 
-    workbook = load_workbook(filename=f'files/{base}')
+    workbook = load_workbook(filename=f'{GENERATOR_HOME}files/{base}')
     sheet = workbook.active
 
     for cellmap in CELLMAPS:
@@ -66,18 +67,18 @@ def main():
             else:
                 raise ValueError(f'Incorrect CELLMAPS data {data}')
 
-    workbook.save(filename=f'files/{output_file_name}')
+    workbook.save(filename=f'{GENERATOR_HOME}files/{output_file_name}')
     print(f'New file was created: {output_file_name}')
 
     if BACKUP_IN_DROPBOX:
         subprocess.call(
-            f'cp files/{output_file_name} {BACKUP_DESTINATION_DIR}{output_file_name}',
+            f'cp {GENERATOR_HOME}files/{output_file_name} {BACKUP_DESTINATION_DIR}{output_file_name}',
             shell=True
         )
         print(f'Backup success: {BACKUP_DESTINATION_DIR}{output_file_name}')
 
 def get_output_file_name(monday, base) -> str:
-    files = sorted(os.listdir('files/'))
+    files = sorted(os.listdir(f'{GENERATOR_HOME}files/'))
     tail = monday.strftime('%Y-%m-%d')
     file_for_current_date = [f for f in files if tail == f.split('.', 1)[0][-10:]]
     if len(file_for_current_date) > 0:
@@ -86,15 +87,15 @@ def get_output_file_name(monday, base) -> str:
             print('bye.')
             exit()
         for f in file_for_current_date:
-            subprocess.run(['rm', f'files/{f}'])
-    files = sorted(os.listdir('files/'))
+            subprocess.run(['rm', f'{GENERATOR_HOME}files/{f}'])
+    files = sorted(os.listdir(f'{GENERATOR_HOME}files/'))
     next_number = '{:02d}'.format(max([int(f[:2]) for f in files if f[:2].isdigit()]) + 1)
     file_name = base.split('.', 1)[0][2:-10]
     file_extension = base.split('.', 1)[1] 
     return next_number + file_name + tail + '.' + file_extension
 
 def get_base_file_name():
-    files = sorted(os.listdir('files/'))
+    files = sorted(os.listdir(f'{GENERATOR_HOME}files/'))
     base = [f for f in files if f.startswith('00-')]
     assert len(base) == 1, 'Only 1 template, starting with 00-'
     return base[0]
