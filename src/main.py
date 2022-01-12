@@ -14,8 +14,8 @@ args = parser.parse_args()
 
 DATEFORMAT = '%b-%d-%y'
 BACKUP_IN_DROPBOX = True
-BACKUP_DESTINATION_DIR = '~/Dropbox/RIGHTSOURCE/timesheet/'
-GENERATOR_HOME = '~/Repo/timesheet-generator/'
+BACKUP_DESTINATION_DIR = '/Users/jomsox/Dropbox/RIGHTSOURCE/timesheet/'
+GENERATOR_HOME = '/Users/jomsox/Repos/timesheet-generator/'
 
 CELLMAPS = [
     {'data': 'date', 'day': 0, 'cells': ['B12', 'A18']},
@@ -30,7 +30,7 @@ CELLMAPS = [
     {'data': 'hour', 'day': 4, 'cells': ['E20']},
     {'data': 'date', 'day': 5, 'cells': ['F18']},
     {'data': 'hour', 'day': 5, 'cells': ['F20']},
-    {'data': 'date', 'day': 6, 'cells': ['G18']},
+    {'data': 'date', 'day': 6, 'cells': ['G18', 'D12']},
     {'data': 'hour', 'day': 6, 'cells': ['G20']},
     {'data': 'today', 'cells': ['G26']},
     {'data': 'total', 'cells': ['G22']},
